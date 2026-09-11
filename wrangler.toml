@@ -1,0 +1,34 @@
+name = "asset-cms"
+main = "src/index.js"
+compatibility_date = "2023-12-01"
+
+# Environment variables
+[env.production]
+vars = { ENVIRONMENT = "production" }
+
+[env.development]
+vars = { ENVIRONMENT = "development" }
+
+# Cloudflare KV Namespace for caching
+[[kv_namespaces]]
+binding = "CACHE"
+id = "your-kv-namespace-id"
+preview_id = "your-preview-kv-namespace-id"
+
+# Routes
+routes = [
+  { pattern = "example.com/*", zone_name = "example.com" }
+]
+
+# Build configuration
+[build]
+command = "npm install && npm run build"
+cwd = "./"
+
+# Triggers
+[triggers]
+crons = ["0 */6 * * *"]  # Run every 6 hours
+
+# Observability
+[observability]
+enabled = true

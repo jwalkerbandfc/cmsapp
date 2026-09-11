@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asset CMS</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.snow.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav id="navbar" class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">Asset CMS</div>
+      <ul id="navLinks" class="nav-links"></ul>
+      <button id="adminBtn" class="nav-admin-btn">Admin</button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div id="content" class="content"></div>
+
+  <!-- Admin Panel Modal -->
+  <div id="adminModal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Admin Panel</h2>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+      </div>
+
+      <div class="admin-tabs">
+        <button class="tab-btn active" onclick="switchTab('login')">Login</button>
+        <button class="tab-btn" onclick="switchTab('pages')">Pages</button>
+        <button class="tab-btn" onclick="switchTab('navigation')">Navigation</button>
+        <button class="tab-btn" onclick="switchTab('editor')">Edit Page</button>
+      </div>
+
+      <!-- Login Tab -->
+      <div id="loginTab" class="tab-content active">
+        <form onsubmit="handleLogin(event)">
+          <input type="email" id="loginEmail" placeholder="Email" required>
+          <input type="password" id="loginPassword" placeholder="Password" required>
+          <button type="submit">Login</button>
+        </form>
+        <p class="auth-note">or create new account</p>
+        <button onclick="switchToRegister()">Register</button>
+      </div>
+
+      <!-- Register Tab (hidden) -->
+      <div id="registerTab" class="tab-content">
+        <form onsubmit="handleRegister(event)">
+          <input type="email" id="registerEmail" placeholder="Email" required>
+          <input type="password" id="registerPassword" placeholder="Password" required>
+          <input type="password" id="registerPassword2" placeholder="Confirm Password" required>
+          <button type="submit">Create Account</button>
+        </form>
+        <button onclick="switchToLogin()">Back to Login</button>
+      </div>
+
+      <!-- Pages Management Tab -->
+      <div id="pagesTab" class="tab-content">
+        <div class="admin-section">
+          <h3>Create New Page</h3>
+          <form onsubmit="handleCreatePage(event)">
+            <input type="text" id="pageTitle" placeholder="Page Title" required>
+            <input type="text" id="pageSlug" placeholder="URL Slug (e.g., about)" required>
+            <input type="text" id="heroTitle" placeholder="Hero Title">
+            <input type="text" id="heroSubtitle" placeholder="Hero Subtitle">
+            <input type="url" id="heroImage" placeholder="Hero Image URL">
+            <button type="submit">Create Page</button>
+          </form>
+        </div>
+
+        <div class="admin-section">
+          <h3>Published Pages</h3>
+          <ul id="pagesList"></ul>
+        </div>
+      </div>
+
+      <!-- Navigation Management Tab -->
+      <div id="navigationTab" class="tab-content">
+        <div class="admin-section">
+          <h3>Add Navigation Link</h3>
+          <form onsubmit="handleAddNavLink(event)">
+            <input type="text" id="navLabel" placeholder="Link Label" required>
+            <input type="url" id="navUrl" placeholder="URL" required>
+            <input type="number" id="navOrder" placeholder="Order" value="0">
+            <button type="submit">Add Link</button>
+          </form>
+        </div>
+
+        <div class="admin-section">
+          <h3>Current Navigation</h3>
+          <ul id="navLinksList"></ul>
+        </div>
+      </div>
+
+      <!-- Page Editor Tab -->
+      <div id="editorTab" class="tab-content">
+        <div class="admin-section">
+          <h3>Select Page to Edit</h3>
+          <select id="pageSelect" onchange="loadPageForEditing()">
+            <option value="">Choose a page...</option>
+          </select>
+        </div>
+
+        <div id="editorContent" class="editor-content hidden">
+          <h3>Add Content Block</h3>
+          <div class="content-block-types">
+            <button onclick="addContentBlock('text')">Add Text</button>
+            <button onclick="addContentBlock('image')">Add Image</button>
+            <button onclick="addContentBlock('video')">Add Video</button>
+          </div>
+
+          <div id="editorArea" class="editor-area">
+            <h4>Drag & Drop Content</h4>
+            <div id="contentCanvas" class="content-canvas">
+              <p>Drop content here or use buttons above</p>
+            </div>
+          </div>
+
+          <div class="editor-actions">
+            <button onclick="savePage()">Save Page</button>
+            <button onclick="publishPage()">Publish Page</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rich Text Editor (hidden by default) -->
+  <div id="richTextModal" class="modal hidden">
+    <div class="modal-content editor-modal">
+      <div class="modal-header">
+        <h2>Text Editor</h2>
+        <button class="close-btn" onclick="closeRichText()">&times;</button>
+      </div>
+      <div id="editor" style="height: 300px;"></div>
+      <div class="modal-actions">
+        <button onclick="saveRichText()">Save</button>
+        <button onclick="closeRichText()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
